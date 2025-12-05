@@ -169,7 +169,7 @@ export default function Home() {
         {!loading && !wrappedData && isConnected && (
           <div className="text-center py-20 px-4">
             <p className="text-zinc-400 text-lg">
-              No trading data found for this address.
+              Womp Womp, no trades found 🥺
               <br />
               <span className="text-sm text-zinc-500">
                 Make sure you've traded on Polymarket in 2025.

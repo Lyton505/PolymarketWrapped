@@ -39,6 +39,11 @@ export const publicClient = createPublicClient({
  * Check if an address can mint a badge
  */
 export async function canMintBadge(address: string): Promise<boolean> {
+  if (!APP_CONFIG.wrappedBadgeContract) {
+    console.warn("Badge contract address not configured");
+    return false;
+  }
+
   try {
     const canMint = await publicClient.readContract({
       address: APP_CONFIG.wrappedBadgeContract as `0x${string}`,
@@ -50,7 +55,7 @@ export async function canMintBadge(address: string): Promise<boolean> {
     return canMint;
   } catch (error) {
     console.error("Error checking mint eligibility:", error);
-    return false;
+    throw error; // Re-throw to let the component handle the error
   }
 }
 
@@ -58,6 +63,11 @@ export async function canMintBadge(address: string): Promise<boolean> {
  * Get total number of minted badges
  */
 export async function getTotalSupply(): Promise<number> {
+  if (!APP_CONFIG.wrappedBadgeContract) {
+    console.warn("Badge contract address not configured");
+    return 0;
+  }
+
   try {
     const supply = await publicClient.readContract({
       address: APP_CONFIG.wrappedBadgeContract as `0x${string}`,

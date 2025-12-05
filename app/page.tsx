@@ -6,6 +6,8 @@ import { BackgroundEffects } from "@/components/BackgroundEffects";
 import { HeroSection } from "@/components/HeroSection";
 import { StatsOverviewCard } from "@/components/StatsOverviewCard";
 import { PersonaCard } from "@/components/PersonaCard";
+import { MintBadgeButton } from "@/components/MintBadgeButton";
+import { BadgePreview } from "@/components/BadgePreview";
 import type { WrappedData } from "@/types/trading";
 
 export default function Home() {
@@ -178,16 +180,14 @@ export default function Home() {
 
             {/* Action Buttons */}
             <div className="flex gap-4 flex-wrap justify-center">
-              <button className="px-8 py-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-lg font-medium transition-all">
-                Share on Twitter
-              </button>
-              <button className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white rounded-lg font-medium transition-all">
-                Mint Badge NFT
-              </button>
-              <button className="px-8 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg font-medium transition-all">
-                Export Image
-              </button>
+              <BadgePreview wrappedData={wrappedData} />
+              <MintBadgeButton wrappedData={wrappedData} />
             </div>
+
+            <p className="text-sm text-zinc-500 text-center max-w-2xl">
+              💡 Generate a preview to see your badge before minting, share it
+              on Twitter, or download it!
+            </p>
           </div>
         )}
 

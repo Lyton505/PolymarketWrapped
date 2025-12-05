@@ -6,17 +6,29 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 export function HeroSection({
   onConnect,
   onPinCodeSubmit,
+  onAddressSubmit,
 }: {
   onConnect?: () => void;
   onPinCodeSubmit?: (code: string) => void;
+  onAddressSubmit?: (address: string) => void;
 }) {
   const [pinCode, setPinCode] = useState("");
   const [showPinInput, setShowPinInput] = useState(false);
+  const [searchAddress, setSearchAddress] = useState("");
+  const [showAddressInput, setShowAddressInput] = useState(false);
 
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (pinCode && onPinCodeSubmit) {
       onPinCodeSubmit(pinCode.toUpperCase());
+    }
+  };
+
+  const handleAddressSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchAddress && onAddressSubmit) {
+      onAddressSubmit(searchAddress.trim());
+      setSearchAddress("");
     }
   };
 
@@ -92,35 +104,93 @@ export function HeroSection({
           Your personalized year in Polymarket trading
           <br />
           <span className="text-sm text-zinc-500">
-            Connect your wallet or enter a pin code to view any trader's wrapped
+            Connect your wallet, search by address, or enter a pin code
           </span>
         </p>
 
-        {/* Pin Code Section */}
+        {/* Search and Pin Code Section */}
         <div className="flex flex-col items-center gap-3 w-full max-w-md">
+          {/* Address Search */}
+          {!showAddressInput ? (
+            <button
+              onClick={() => {
+                setShowAddressInput(true);
+                setShowPinInput(false);
+              }}
+              className="px-6 py-2 text-sm text-blue-400 hover:text-blue-300 transition-colors underline underline-offset-4"
+            >
+              Search by address
+            </button>
+          ) : (
+            <form
+              onSubmit={handleAddressSubmit}
+              className="w-full flex flex-col gap-2"
+            >
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={searchAddress}
+                  onChange={(e) => setSearchAddress(e.target.value)}
+                  placeholder="Enter Polymarket address (0x...)"
+                  className="flex-1 px-4 py-3 bg-zinc-900/50 border border-zinc-800 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 font-mono text-sm"
+                />
+                <button
+                  type="submit"
+                  disabled={!searchAddress.match(/^0x[a-fA-F0-9]{40}$/)}
+                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 disabled:from-zinc-800 disabled:to-zinc-800 disabled:text-zinc-600 text-white rounded-lg font-medium transition-all disabled:cursor-not-allowed"
+                >
+                  Search
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAddressInput(false)}
+                className="text-xs text-zinc-500 hover:text-zinc-400 transition-colors"
+              >
+                Cancel
+              </button>
+            </form>
+          )}
+
+          {/* Pin Code Input */}
           {!showPinInput ? (
             <button
-              onClick={() => setShowPinInput(true)}
+              onClick={() => {
+                setShowPinInput(true);
+                setShowAddressInput(false);
+              }}
               className="px-6 py-2 text-sm text-purple-400 hover:text-purple-300 transition-colors underline underline-offset-4"
             >
               Have a pin code?
             </button>
           ) : (
-            <form onSubmit={handlePinSubmit} className="w-full flex gap-2">
-              <input
-                type="text"
-                value={pinCode}
-                onChange={(e) => setPinCode(e.target.value.toUpperCase())}
-                placeholder="Enter 6-character code"
-                maxLength={6}
-                className="flex-1 px-4 py-3 bg-zinc-900/50 border border-zinc-800 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 uppercase font-mono"
-              />
+            <form
+              onSubmit={handlePinSubmit}
+              className="w-full flex flex-col gap-2"
+            >
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={pinCode}
+                  onChange={(e) => setPinCode(e.target.value.toUpperCase())}
+                  placeholder="Enter 6-character code"
+                  maxLength={6}
+                  className="flex-1 px-4 py-3 bg-zinc-900/50 border border-zinc-800 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 uppercase font-mono"
+                />
+                <button
+                  type="submit"
+                  disabled={pinCode.length !== 6}
+                  className="px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 disabled:from-zinc-800 disabled:to-zinc-800 disabled:text-zinc-600 text-white rounded-lg font-medium transition-all disabled:cursor-not-allowed"
+                >
+                  View
+                </button>
+              </div>
               <button
-                type="submit"
-                disabled={pinCode.length !== 6}
-                className="px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 disabled:from-zinc-800 disabled:to-zinc-800 disabled:text-zinc-600 text-white rounded-lg font-medium transition-all disabled:cursor-not-allowed"
+                type="button"
+                onClick={() => setShowPinInput(false)}
+                className="text-xs text-zinc-500 hover:text-zinc-400 transition-colors"
               >
-                View
+                Cancel
               </button>
             </form>
           )}

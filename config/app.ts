@@ -3,7 +3,11 @@ export const APP_CONFIG = {
   description: "Your personalized year in Polymarket trading",
   year: 2025,
   polymarketApiUrl: "https://clob.polymarket.com",
+  polymarketDataApiUrl: "https://data-api.polymarket.com", // Public data API (no auth required)
   gammaApiUrl: "https://gamma-api.polymarket.com",
+
+  // Polymarket API Key (optional - for higher rate limits)
+  polymarketApiKey: process.env.POLYMARKET_API_KEY || "",
 
   // Badge contract on Base
   wrappedBadgeContract: process.env.NEXT_PUBLIC_BADGE_CONTRACT_ADDRESS || "",

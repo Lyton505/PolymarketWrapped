@@ -1,26 +1,29 @@
 "use client";
 
-import { toPng } from 'html-to-image';
+import { toPng } from "html-to-image";
 
 /**
  * Export a DOM element as a PNG image
  */
-export async function exportToPng(element: HTMLElement, filename: string = 'polymarket-wrapped.png') {
+export async function exportToPng(
+  element: HTMLElement,
+  filename: string = "polymarket-wrapped.png"
+) {
   try {
     const dataUrl = await toPng(element, {
       quality: 0.95,
       pixelRatio: 2, // 2x for retina displays
     });
-    
+
     // Create download link
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.download = filename;
     link.href = dataUrl;
     link.click();
-    
+
     return dataUrl;
   } catch (error) {
-    console.error('Error exporting image:', error);
+    console.error("Error exporting image:", error);
     throw error;
   }
 }
@@ -30,14 +33,17 @@ export async function exportToPng(element: HTMLElement, filename: string = 'poly
  */
 export function generateShareText(stats: any): string {
   const { totalTrades, totalPnL, winRate, tradingPersona } = stats;
-  
-  const pnlText = totalPnL >= 0 ? `+$${totalPnL.toFixed(0)}` : `-$${Math.abs(totalPnL).toFixed(0)}`;
+
+  const pnlText =
+    totalPnL >= 0
+      ? `+$${totalPnL.toFixed(0)}`
+      : `-$${Math.abs(totalPnL).toFixed(0)}`;
   const winRateText = `${(winRate * 100).toFixed(1)}%`;
-  
+
   return `I'm a ${tradingPersona.emoji} ${tradingPersona.type} on @Polymarket!
 
 📊 ${totalTrades} trades in 2025
-💰 ${pnlText} P&L
+💰 ${pnlText} realized P&L
 🎯 ${winRateText} win rate
 
 Check out your Polymarket Wrapped 2025!`;
@@ -46,12 +52,15 @@ Check out your Polymarket Wrapped 2025!`;
 /**
  * Share on Twitter
  */
-export function shareOnTwitter(text: string, url: string = window.location.href) {
-  const twitterUrl = new URL('https://twitter.com/intent/tweet');
-  twitterUrl.searchParams.set('text', text);
-  twitterUrl.searchParams.set('url', url);
-  
-  window.open(twitterUrl.toString(), '_blank', 'width=550,height=420');
+export function shareOnTwitter(
+  text: string,
+  url: string = window.location.href
+) {
+  const twitterUrl = new URL("https://twitter.com/intent/tweet");
+  twitterUrl.searchParams.set("text", text);
+  twitterUrl.searchParams.set("url", url);
+
+  window.open(twitterUrl.toString(), "_blank", "width=550,height=420");
 }
 
 /**
@@ -62,7 +71,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     await navigator.clipboard.writeText(text);
     return true;
   } catch (error) {
-    console.error('Failed to copy to clipboard:', error);
+    console.error("Failed to copy to clipboard:", error);
     return false;
   }
 }

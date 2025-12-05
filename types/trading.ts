@@ -7,7 +7,7 @@ export interface Trade {
   price: number;
   size: number;
   timestamp: number;
-  pnl?: number;
+  pnl?: number; // Realized P&L (only on sell trades)
   category?: string;
   marketImage?: string;
 }
@@ -29,14 +29,14 @@ export interface Position {
   size: number;
   averagePrice: number;
   currentPrice: number;
-  pnl: number;
+  pnl: number; // Unrealized P&L (not yet closed)
   category?: string;
 }
 
 export interface TradingStats {
   totalTrades: number;
   totalVolume: number;
-  totalPnL: number;
+  totalPnL: number; // Realized P&L from closed trades
   winRate: number;
   bestTrade: Trade | null;
   worstTrade: Trade | null;

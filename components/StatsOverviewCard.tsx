@@ -22,7 +22,7 @@ export function StatsOverviewCard({ stats }: { stats: TradingStats }) {
           icon="💰"
         />
         <StatItem
-          label="Net P&L"
+          label="Realized P&L"
           value={formatCurrency(stats.totalPnL)}
           valueClassName={
             stats.totalPnL >= 0 ? "text-green-400" : "text-red-400"
@@ -54,17 +54,20 @@ function StatItem({
   value,
   icon,
   valueClassName = "text-white",
+  subtitle,
 }: {
   label: string;
   value: string;
   icon: string;
   valueClassName?: string;
+  subtitle?: string;
 }) {
   return (
     <div className="flex flex-col gap-1">
       <div className="text-2xl">{icon}</div>
       <div className="text-sm text-zinc-400">{label}</div>
       <div className={`text-2xl font-bold ${valueClassName}`}>{value}</div>
+      {subtitle && <div className="text-xs text-zinc-500">{subtitle}</div>}
     </div>
   );
 }

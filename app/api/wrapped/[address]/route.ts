@@ -10,7 +10,10 @@ export async function GET(
   try {
     const { address } = await params;
 
+    console.log(`API Request: Fetching wrapped data for address: ${address}`);
+
     if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
+      console.warn(`Invalid address format: ${address}`);
       return NextResponse.json({ error: "Invalid address" }, { status: 400 });
     }
 
@@ -20,11 +23,16 @@ export async function GET(
     );
 
     if (trades.length === 0) {
+      console.log(`No trading data found for address: ${address}`);
       return NextResponse.json(
         { error: "No trading data found" },
         { status: 404 }
       );
     }
+
+    console.log(
+      `Successfully generated wrapped data for address: ${address} (${trades.length} trades, ${positions.length} positions)`
+    );
 
     // Calculate analytics
     const stats = analyticsEngine.calculateStats(trades, positions);

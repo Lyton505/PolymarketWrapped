@@ -23,7 +23,8 @@ export class AnalyticsEngine {
 
     // Basic stats
     const totalVolume = trades.reduce((sum, t) => sum + t.price * t.size, 0);
-    const totalPnL = positions.reduce((sum, p) => sum + p.pnl, 0);
+    // Total P&L is realized - calculated from closed trades (sell transactions)
+    const totalPnL = tradesWithPnL.reduce((sum, t) => sum + (t.pnl || 0), 0);
 
     // Win/Loss analysis
     const { wins, losses, winRate } = this.calculateWinRate(tradesWithPnL);

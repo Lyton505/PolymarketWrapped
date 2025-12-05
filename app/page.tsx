@@ -23,19 +23,37 @@ export default function Home() {
   const loadWrappedData = async (userAddress: string) => {
     setLoading(true);
     setError(null);
+    setWrappedData(null); // Clear previous data
 
     try {
       const response = await fetch(`/api/wrapped/${userAddress}`);
 
       if (!response.ok) {
-        throw new Error("Failed to load wrapped data");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to load wrapped data");
       }
 
       const data = await response.json();
       setWrappedData(data);
     } catch (err) {
       console.error("Error loading wrapped data:", err);
-      setError("Failed to load your trading data. Please try again.");
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to load your trading data";
+
+      if (errorMessage.includes("No trading data found")) {
+        setError(
+          "No trading data found. If you connected your wallet, your Polymarket trades might be on a different proxy address. Try using the address search with your Polymarket proxy wallet address instead. Visit polymarket.com to find your trading address."
+        );
+      } else if (
+        errorMessage.includes("Unauthorized") ||
+        errorMessage.includes("401")
+      ) {
+        setError(
+          "Unable to fetch trading data. API key may be required. Please check the console for details."
+        );
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -62,12 +80,19 @@ export default function Home() {
     }
   };
 
+  const handleAddressSubmit = async (address: string) => {
+    loadWrappedData(address);
+  };
+
   return (
     <main className="min-h-screen relative">
       <BackgroundEffects />
 
       <div className="relative z-10">
-        <HeroSection onPinCodeSubmit={handlePinCodeSubmit} />
+        <HeroSection
+          onPinCodeSubmit={handlePinCodeSubmit}
+          onAddressSubmit={handleAddressSubmit}
+        />
 
         {error && (
           <div className="max-w-2xl mx-auto px-4 mb-8">
@@ -167,14 +192,28 @@ export default function Home() {
         )}
 
         {!loading && !wrappedData && isConnected && (
-          <div className="text-center py-20 px-4">
-            <p className="text-zinc-400 text-lg">
+          <div className="text-center py-20 px-4 max-w-2xl mx-auto">
+            <p className="text-zinc-400 text-lg mb-4">
               Womp Womp, no trades found 🥺
-              <br />
-              <span className="text-sm text-zinc-500">
-                Make sure you've traded on Polymarket in 2025.
-              </span>
             </p>
+            <div className="text-sm text-zinc-500 space-y-2">
+              <p>
+                No trading activity found for your connected wallet. This could
+                mean:
+              </p>
+              <ul className="text-left list-disc list-inside space-y-1 bg-zinc-900/50 rounded-lg p-4 border border-zinc-800">
+                <li>You haven't traded on Polymarket yet</li>
+                <li>Your trades are from a different wallet</li>
+                <li>Your account may need more time to sync</li>
+              </ul>
+              <p className="text-zinc-400 font-medium mt-4">
+                💡 You can also search directly:
+              </p>
+              <p>
+                Use the "Search by address" button above with either your EOA
+                (wallet address) or Polymarket Safe address.
+              </p>
+            </div>
           </div>
         )}
       </div>

@@ -50,3 +50,6 @@ typechain-types/
 *.swp
 *.swo
 *~
+
+# Local Netlify folder
+.netlify

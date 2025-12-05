@@ -5,10 +5,10 @@ import type { WrappedData } from "@/types/trading";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { address: string } }
+  { params }: { params: Promise<{ address: string }> }
 ) {
   try {
-    const address = params.address;
+    const { address } = await params;
 
     if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
       return NextResponse.json({ error: "Invalid address" }, { status: 400 });

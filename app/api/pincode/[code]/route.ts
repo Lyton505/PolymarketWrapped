@@ -5,10 +5,11 @@ const pinCodes = new Map<string, { address: string; expiresAt: number }>();
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { code: string } }
+  { params }: { params: Promise<{ code: string }> }
 ) {
   try {
-    const code = params.code.toUpperCase();
+    const { code: rawCode } = await params;
+    const code = rawCode.toUpperCase();
 
     const pinData = pinCodes.get(code);
 

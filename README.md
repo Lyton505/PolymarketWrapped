@@ -261,7 +261,7 @@ Built with ❤️ for the Polymarket community
 
 ## 🚀 Deployment
 
-### 1. Deploy Smart Contract (One-time, by you)
+### 1. Deploy Smart Contract (One-time, by dev)
 
 The NFT badge contract needs to be deployed once by the app maintainer. All users will then mint from this contract.
 

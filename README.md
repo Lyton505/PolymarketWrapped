@@ -88,21 +88,13 @@ A delightful, social, data-driven Wrapped experience for Polymarket traders, wit
 
 The `PolymarketWrappedBadge` contract is located in `/contracts/PolymarketWrappedBadge.sol`.
 
-**Using Hardhat/Foundry:**
+**⚠️ Note:** Due to dependency conflicts, we recommend deploying the contract separately.
 
-1. Install dependencies:
+See **[CONTRACT_DEPLOYMENT.md](CONTRACT_DEPLOYMENT.md)** for detailed deployment instructions using:
 
-   ```bash
-   npm install --save-dev hardhat @openzeppelin/contracts
-   ```
-
-2. Deploy to Base:
-
-   ```bash
-   npx hardhat run scripts/deploy.js --network base
-   ```
-
-3. Copy the deployed contract address to your `.env.local` file
+- ✨ Remix IDE (easiest, browser-based)
+- 🔨 Foundry (recommended for production)
+- 📦 Separate Hardhat project
 
 **Contract Features:**
 
@@ -266,3 +258,36 @@ For issues, questions, or suggestions, please [open an issue](https://github.com
 ---
 
 Built with ❤️ for the Polymarket community
+
+## 🚀 Deployment
+
+### 1. Deploy Smart Contract (One-time, by you)
+
+The NFT badge contract needs to be deployed once by the app maintainer. All users will then mint from this contract.
+
+**Quick Deploy with Remix:**
+
+1. Visit [Remix IDE](https://remix.ethereum.org/)
+2. Copy [`contracts/PolymarketWrappedBadge.sol`](contracts/PolymarketWrappedBadge.sol)
+3. Compile and deploy to Base Mainnet
+4. Copy the deployed contract address
+
+See [`CONTRACT_DEPLOYMENT.md`](CONTRACT_DEPLOYMENT.md) for detailed instructions.
+
+### 2. Deploy Frontend
+
+**Deploy to Vercel (Recommended):**
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+```
+
+**Environment Variables (set in Vercel dashboard):**
+
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` - From cloud.walletconnect.com
+- `NEXT_PUBLIC_BADGE_CONTRACT_ADDRESS` - Your deployed contract address
+- `POLYMARKET_API_KEY` - Optional, for higher rate limits
